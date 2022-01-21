@@ -119,12 +119,20 @@ $(".list-group").on("click", "span", function() {
   var dateInput = $("<input>").attr("type", "text").addClass("form-control").val(date);
   // swap out elements
   $(this).replaceWith(dateInput);
+  // enable jquery ui datepicker
+  dateInput.datepicker({
+    minDate: 1,
+    onclose: function() {
+      // when calander is closed, force a "change" event on the dateInput
+      $(this).trigger("change");
+    }
+  });
   // automatically focus on new element
   dateInput.trigger("focus");
 });
 
 // value of due date was changed
-$(".list-group").on("blur", "input[type='text']", function() {
+$(".list-group").on("change", "input[type='text']", function() {
   // get current text
   var date = $(this).val().trim();
   // get the parent ul's id attribute
@@ -192,6 +200,10 @@ $("#trash").droppable({
     console.log("out");
   }
 })
+
+$("#modalDueDate").datepicker({
+  minDate: 1
+});
 
 // load tasks for the first time
 loadTasks();
